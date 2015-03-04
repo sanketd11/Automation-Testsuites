@@ -6,7 +6,7 @@ casper.test.begin("Automation testing part-2", 9, function suite(test) {
     var x = require('casper').selectXPath;//required if we detect an element using xpath
     var github_username = casper.cli.options.username;//user input github username
     var github_password = casper.cli.options.password;//user input github password
-	var research_username = casper.cli.options.username_a;//user input research username
+    var research_username = casper.cli.options.username_a;//user input research username
     var research_password = casper.cli.options.password_a;//user input research password
     var rcloud_url = casper.cli.options.url;//user input RCloud login url
     var functions = require(fs.absolute('basicfunctions.js'));//invoke the common functions present in basicfunctions.js
