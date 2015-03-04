@@ -8,7 +8,7 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
     var github_password = casper.cli.options.password;//user input github password
     var research_username = casper.cli.options.username_a;//user input research username
     var research_password = casper.cli.options.password_a;//user input research password
-	var rcloud_url = casper.cli.options.url;//user input RCloud login url
+    var rcloud_url = casper.cli.options.url;//user input RCloud login url
     var functions = require(fs.absolute('basicfunctions.js'));//invoke the common functions present in basicfunctions.js
     var initialcounter = 0;//store initial count of notebooks
     var newcounter = 0;//store initial count of notebooks
@@ -77,8 +77,8 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
 
     //fetch the output text and compare
     casper.then(function () {
-		console.log('Testing if The R code has produced the expected output');
-		test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/pre/code' }, '100');
+	console.log('Testing if The R code has produced the expected output');
+	test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/pre/code' }, '100');
     });
 
     //Create a new Notebook.
@@ -97,7 +97,7 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
 
     //fetch the output text and compare
     casper.then(function () {
-		var result = this.fetchText({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div/div/div[3]/div[2]/pre[2]/code'});//fetch the output after execution
+	var result = this.fetchText({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div/div/div[3]/div[2]/pre[2]/code'});//fetch the output after execution
         var res = result.substring(7);//remove the unwanted characters
         this.echo("The output of the R code is: " + res);
         this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/pre/code'},"Error");
@@ -113,8 +113,8 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
     //Fork the currently loaded python notebook
     casper.then(function(){
         casper.evaluate(function () {
-			$('#fork-notebook').click();
-		});
+		$('#fork-notebook').click();
+	});
         this.wait(10000);
         console.log('clicked forked icon');   
         this.wait(10000);  
@@ -124,8 +124,8 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
     casper.then(function(){
         this.wait(15000);
         casper.evaluate(function () {
-			$('#run-notebook').click();
-		});
+		$('#run-notebook').click();
+	});
         this.wait(10000);
     });
 
@@ -136,9 +136,9 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
 	});
 
     //Testing for the errors thrown for python code
-	casper.then(function(){
-		console.log('Testing if error is shown for invalid python code');
-		this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[2]' }, 'NameError');
+    casper.then(function(){
+	console.log('Testing if error is shown for invalid python code');
+	this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[2]' }, 'NameError');
     });
 
 
