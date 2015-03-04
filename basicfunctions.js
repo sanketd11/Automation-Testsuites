@@ -33,9 +33,8 @@ exports.login = function (casper, research_username, research_password, github_u
                     this.sendKeys('#login > form:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(2) > td:nth-child(2) > input:nth-child(1)', research_password);
                     this.click({ type: 'css',path: '#login > form:nth-child(1) > table:nth-child(2) > tbody:nth-child(1) > tr:nth-child(3) > td:nth-child(2) > input:nth-child(1)'});
                 });
-
+            
                 if (casper.getTitle().match(/GitHub/)) {
-
                     casper.viewport(1024, 768).then(function () {
                         this.test.assertTitleMatch(/GitHub/, "Github page has been loaded");
                         console.log("Login into GitHub with supplied username and password");
@@ -46,13 +45,11 @@ exports.login = function (casper, research_username, research_password, github_u
 
                     casper.viewport(1024, 768).then(function () {
                         if (this.getTitle().match(/GitHub/)) {
-
                             this.click({
                                 type: 'css',
                                 path: 'html body.logged_in div.wrapper div.site div#site-container.context-loader-container div.setup-wrapper div.setup-main form p button.button'
                             });
                             console.log("Github Authorization completed");
-
                         }
                         else {
                             casper.viewport(1024, 768).then(function () {
@@ -70,7 +67,7 @@ exports.login = function (casper, research_username, research_password, github_u
                 });
             }
         });
-}
+};
 
 //create a new notebook
 exports.create_notebook = function (casper) {
