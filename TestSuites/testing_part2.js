@@ -139,7 +139,6 @@ casper.test.begin("Automation testing part-2", 9, function suite(test) {
         console.log('Logging out of RCloud');
         this.click({ type : 'xpath' , path : '/html/body/div[2]/div/div[2]/ul[2]/li[3]/a'});
         this.wait(7000);
-
     });
 
     casper.viewport(1366, 768).then(function () {
@@ -147,7 +146,6 @@ casper.test.begin("Automation testing part-2", 9, function suite(test) {
         this.test.assertTextExists(
             'Log back in', "Log Back In option exists"
         );
-
     });
 
     casper.viewport(1366, 768).then(function () {
