@@ -1,7 +1,7 @@
 console.log('Description :');
-console.log('This is an automated testscript to be run on RCloud 1.2 to test if some of the basic features are working properly');
+console.log('This is an automated testscript to be run on RCloud 1.4 to test if some of the basic features are working properly');
 console.log('The features to be tested are : Search a given item,rename a notebook, logout of RCloud and logout of Github ');
-casper.test.begin("Automation testing part-2", 10, function suite(test) {
+casper.test.begin("Automation smoke testing part-2", 10, function suite(test) {
 
     var x = require('casper').selectXPath;//required if we detect an element using xpath
     var github_username = casper.cli.options.username;//user input github username
@@ -60,11 +60,6 @@ casper.test.begin("Automation testing part-2", 10, function suite(test) {
     casper.viewport(1366, 768).then(function () {
         this.sendKeys('div.ace-chrome:nth-child(1) > textarea:nth-child(1)', input_Rcode);
         this.click({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div/div[2]/div[2]/span[1]/i'});//xpath for executing the contents
-    /*casper.viewport(1366, 768).then(function () {
-        this.sendKeys('div.ace-chrome:nth-child(1) > textarea:nth-child(1)', input_Rcode);
-        this.wait(3000);
-        this.click({type: 'css', path: 'div:nth-child(1) > div:nth-child(1) > table:nth-child(1) > td:nth-child(3) > span:nth-child(1) > i:nth-child(1)'});//css for executing the contents
-        this.echo("executed contents of First cell");*/
         this.wait(6000);
     });
 
@@ -101,14 +96,12 @@ casper.test.begin("Automation testing part-2", 10, function suite(test) {
         });
         //verify that the searched item is found in the local user's div
         casper.viewport(1366, 768).then(function () {
-            //this.echo("Combo= "+combo);
             for (var i = 1; i <= counter; i++) {
                 this.wait(5000);
                 var result = this.fetchText(x('/html/body/div[3]/div/div/div/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr/td/a'));
                 //this.echo(result);
                 this.test.assertEquals(result, combo, 'Notebook with searched id has been found');
                 break;
-
             }//for closes
         });//function closes
     });
@@ -137,11 +130,8 @@ casper.test.begin("Automation testing part-2", 10, function suite(test) {
 
     casper.viewport(1366, 768).then(function () {
         console.log('Logging out of RCloud');
-        /*var z = casper.evaluate(function () {
-            $('#rcloud-logout').click();*/
         this.click({ type : 'xpath' , path : '/html/body/div[2]/div/div[2]/ul[2]/li[3]/a'});
         this.wait(7000);
-
     });
 
     casper.viewport(1366, 768).then(function () {
@@ -149,7 +139,6 @@ casper.test.begin("Automation testing part-2", 10, function suite(test) {
         this.test.assertTextExists(
             'Log back in', "Log Back In option exists"
         );
-
     });
 
     casper.viewport(1366, 768).then(function () {
@@ -171,7 +160,6 @@ casper.test.begin("Automation testing part-2", 10, function suite(test) {
         this.wait(7000);
         this.echo("The url after logging out of Github : " + this.getCurrentUrl());
         this.test.assertTextExists('GitHub', "Confirmed that successfully logged out of Github");
-
     });
 
     casper.run(function () {
