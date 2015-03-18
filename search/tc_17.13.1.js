@@ -40,51 +40,49 @@
                 title = functions.notebookname(casper);
                 this.echo("Notebook title : " + title);
                 this.wait(3000);
-                var author = this.fetchText({type: 'xpath', path: '//*[@id="notebook-author"]'});
+                var author = this.fetchText({type: 'xpath', path: './/*[@id="notebook-author"]'});
                 this.echo("Notebook author: " + author);
                 this.test.assertNotEquals(author, github_username, "Confirmed that notebook belongs to different user");
             });
         });
         casper.then(function(){
             if (this.visible('#input-text-search')) {
-                    console.log('Search div is already opened');
-                }
+                console.log('Search div is already opened');
+            }
             else {
-                    var z = casper.evaluate(function () {
-                        $(' .icon-search').click();
-                    });
-                    this.echo("Opened Search div");
+                var z = casper.evaluate(function () {
+                    $(' .icon-search').click();
+                });
+                this.echo("Opened Search div");
                 }
             });
-                //entering item to be searched
-                casper.then(function () {
-                    this.sendKeys('#input-text-search', item);
-                    this.wait(6000);
-                    this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
-                });
+            //entering item to be searched
+            casper.then(function () {
+                this.sendKeys('#input-text-search', item);
+                this.wait(6000);
+                this.click('#search-form > div:nth-child(1) > div:nth-child(2) > button:nth-child(1)');
+            });
 
-                casper.wait(5000);
+            casper.wait(5000);
 
-                //counting number of Search results
-                casper.then(function () {
-                    var counter = 0;
-                    do
-                    {
-                        counter = counter + 1;
-                        this.wait(2000);
-                    } while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
-
-                    counter = counter - 1;
-                    this.echo("number of search results:" + counter);
-
+            //counting number of Search results
+            casper.then(function () {
+                var counter = 0;
+                do
+                {
+                    counter = counter + 1;
+                    this.wait(2000);
+                } while (this.visible(x('/html/body/div[3]/div/div[1]/div[1]/div/div/div[2]/div[2]/div/div/div[2]/div/div/table[' + counter + ']/tbody/tr[1]/td/a')));
+                counter = counter - 1;
+                this.echo("number of search results:" + counter);
                 if (counter >0)
                 {
                     this.test.pass("search feature is working fine with date and time stamp ");
                 }
                 else
-                    {
-                        this.test.fail("search feature is not working fine with date and time stamp");
-                    }
+                {
+                    this.test.fail("search feature is not working fine with date and time stamp");
+                }
             });
 
         casper.run(function () {
