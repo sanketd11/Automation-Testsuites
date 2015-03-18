@@ -29,7 +29,7 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
 
     casper.wait(10000);
 	
-	//Validating for the RCloud page to be loaded  
+    //Validating for the RCloud page to be loaded  
     casper.then(function () {
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
@@ -74,8 +74,8 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
 
     //fetch the output text and compare
     casper.then(function () {
-		console.log('Testing if The R code has produced the expected output');
-		test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/pre/code' }, '100','Verified the expected output valid R code');
+	console.log('Testing if The R code has produced the expected output');
+	test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/pre/code' }, '100','Verified the expected output valid R code');
     });
 
     //Create a new Notebook.
@@ -92,7 +92,7 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
 
     //fetch the output text and compare
     casper.then(function () {
-		var result = this.fetchText({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div/div/div[3]/div[2]/pre[2]/code'});//fetch the output after execution
+	var result = this.fetchText({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div/div/div[3]/div[2]/pre[2]/code'});//fetch the output after execution
         var res = result.substring(7);//remove the unwanted characters
         this.echo("The output of the R code is: " + res);
         this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/pre/code'},"Error",'Verified the error message for invalid R code');
@@ -108,8 +108,8 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
 	//Testing fork feature	
     casper.then(function(){
         casper.evaluate(function () {
-			$('#fork-notebook').click();
-		});                
+		$('#fork-notebook').click();
+	});                
         this.wait(10000);
         console.log('clicked forked icon');   
         this.wait(10000);  
@@ -119,20 +119,20 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
     casper.then(function(){
         this.wait(15000);
         casper.evaluate(function () {
-			$('#run-notebook').click();
-		});
+		$('#run-notebook').click();
+	});
         this.wait(10000);
     });
     
-	//Testing for python feature for valid python code
-	casper.then(function(){
+    //Testing for python feature for valid python code
+    casper.then(function(){
         console.log('Testing if expected output for valid python code');
         this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[2]' }, '3','Verified the output for valid Python code');
     });
 
-	//Testing python feature for invalid python code	
-	casper.then(function(){
-		console.log('Testing if error is shown for invalid python code');
+    //Testing python feature for invalid python code	
+    casper.then(function(){
+	console.log('Testing if error is shown for invalid python code');
         this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[2]' }, 'NameError', 'Verified the error message for invalid python code');
     });
 
