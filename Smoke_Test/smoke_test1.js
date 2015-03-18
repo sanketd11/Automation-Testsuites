@@ -1,13 +1,11 @@
 console.log('Description :');
-console.log('This is an automated testscript to be run on RCloud 1.2 to test if some of the basic features are working properly');
+console.log('This is an automated testscript to be run on RCloud 1.4 to test if some of the basic features are working properly');
 console.log('The features to be tested are : Login to RCloud, creating a new notebook, entering valid and invalid R and python codes and adding comments ');
 casper.test.begin("Automation testing part-1", 15, function suite(test) {
 
     var x = require('casper').selectXPath;//required if we detect an element using xpath
     var github_username = casper.cli.options.username;//user input github username
     var github_password = casper.cli.options.password;//user input github password
-    var research_username = casper.cli.options.username_a;//user input research username
-    var research_password = casper.cli.options.password_a;//user input research password
     var rcloud_url = casper.cli.options.url;//user input RCloud login url
     var functions = require(fs.absolute('basicfunctions.js'));//invoke the common functions present in basicfunctions.js
     var initialcounter = 0;//store initial count of notebooks
@@ -24,18 +22,19 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
         casper.page.injectJs('jquery-1.10.2.js');//inject jquery codes
     });
 
-    casper.viewport(1024, 768).then(function () {
-        functions.login(casper, research_username, research_password, github_username, github_password, rcloud_url); //Fuction to login into Github and RCloud (source: basicfunctions.js)
+    //Login to the GitHub and RCloud
+	casper.viewport(1024, 768).then(function () {
+        functions.login(casper, github_username, github_password, rcloud_url);   //source: basicfunctions.js
     });
 
     casper.wait(10000);
-
+	
+	//Validating for the RCloud page to be loaded  
     casper.then(function () {
         this.wait(9000);
         console.log("validating that the Main page has got loaded properly by detecting if some of its elements are visible. Here we are checking for Shareable Link and Logout options");
-        functions.validation(casper);     //Function to ensure the page loaded properly (source: basicfunctions.js)
+        functions.validation(casper);    //source: basicfunctions.js
         this.wait(4000);
-
     });
 
     //Get initial count of notebooks
@@ -50,7 +49,7 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
     });
 
     //Create a new Notebook.
-    functions.create_notebook(casper);   //(source: basicfunctions.js)
+    functions.create_notebook(casper); //source: basicfunctions.js 
 
     //Get new count of notebooks
     casper.then(function () {
@@ -65,93 +64,87 @@ casper.test.begin("Automation testing part-1", 15, function suite(test) {
     });
 
     //Add an R cell and execute its contents using a valid R code
-    functions.addnewcell(casper);    //(source: basicfunctions.js)
-
+    functions.addnewcell(casper); //source: basicfunctions.js
     casper.viewport(1366, 768).then(function () {
-        this.sendKeys('div.ace-chrome:nth-child(1) > textarea:nth-child(1)', input_Rcode);  //Writing the sample R code in the newly created cell
+        this.sendKeys('div.ace-chrome:nth-child(1) > textarea:nth-child(1)', input_Rcode);
         this.click({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div/div[2]/div[2]/span[1]/i'});//xpath for executing the contents
         this.wait(5000);
         this.echo("executed contents of the R cell by entering a valid R code");
-
     });
 
     //fetch the output text and compare
     casper.then(function () {
-	console.log('Testing if The R code has produced the expected output');
-	test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/pre/code' }, '100');
+		console.log('Testing if The R code has produced the expected output');
+		test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/pre/code' }, '100','Verified the expected output valid R code');
     });
 
     //Create a new Notebook.
-    functions.create_notebook(casper);   //(source: basicfunctions.js)
+    functions.create_notebook(casper);  //source: basicfunctions.js
 
     //Add an R cell and execute its contents using an invalid R code
-    functions.addnewcell(casper);       // (source: basicfunctions.js)
-
+    functions.addnewcell(casper);   //source: basicfunctions.js
     casper.viewport(1366, 768).then(function () {
-        this.sendKeys('div.ace-chrome:nth-child(1) > textarea:nth-child(1)', invalid_Rcode);   //Writing invalid sample R code
+        this.sendKeys('div.ace-chrome:nth-child(1) > textarea:nth-child(1)', invalid_Rcode);
         this.click({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div[1]/div/div[2]/div[2]/span[1]/i'});//xpath for executing the contents
         this.wait(5000);
         this.echo("executed contents of the R cell by entering an invalid R code");
-
     });
 
     //fetch the output text and compare
     casper.then(function () {
-	var result = this.fetchText({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div/div/div[3]/div[2]/pre[2]/code'});//fetch the output after execution
+		var result = this.fetchText({type: 'xpath', path: '/html/body/div[3]/div/div[2]/div/div/div/div[3]/div[2]/pre[2]/code'});//fetch the output after execution
         var res = result.substring(7);//remove the unwanted characters
         this.echo("The output of the R code is: " + res);
-        this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/pre/code'},"Error");
-
+        this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div/div[3]/div[2]/pre/code'},"Error",'Verified the error message for invalid R code');
     });
 
     //Load the python notebook with ID
     casper.viewport(1366, 768).thenOpen('http://127.0.0.1:8080/edit.html?notebook=' + notebookid, function () {
         this.wait(10000);
-        this.test.assertUrlMatch(/c9a89e7406786866ce1a/, 'Testing notebook is opened');
+        this.test.assertUrlMatch(/c9a89e7406786866ce1a/, 'Testing for notebook to be opened');
         this.wait(10000);
     });
-    //Fork the currently loaded python notebook
+    
+	//Testing fork feature	
     casper.then(function(){
         casper.evaluate(function () {
-		$('#fork-notebook').click();
-	});
+			$('#fork-notebook').click();
+		});                
         this.wait(10000);
         console.log('clicked forked icon');   
         this.wait(10000);  
     });
     
-    //Execute the python notebook
+    //Testing Run all feature
     casper.then(function(){
         this.wait(15000);
         casper.evaluate(function () {
-		$('#run-notebook').click();
-	});
+			$('#run-notebook').click();
+		});
         this.wait(10000);
     });
-
-    //Checking for the expected output
-    casper.then(function(){
+    
+	//Testing for python feature for valid python code
+	casper.then(function(){
         console.log('Testing if expected output for valid python code');
-        this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[2]' }, '3');
-	});
-
-    //Testing for the errors thrown for python code
-    casper.then(function(){
-	console.log('Testing if error is shown for invalid python code');
-	this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[2]' }, 'NameError');
+        this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div[1]/div[3]/div[2]' }, '3','Verified the output for valid Python code');
     });
 
+	//Testing python feature for invalid python code	
+	casper.then(function(){
+		console.log('Testing if error is shown for invalid python code');
+        this.test.assertSelectorHasText({ type : 'xpath' , path : '/html/body/div[3]/div/div[2]/div/div[1]/div[2]/div[3]/div[2]' }, 'NameError', 'Verified the error message for invalid python code');
+    });
 
-    // Testing Comments Section
-    //Adding 3 comments
+    // Adding 3 comments
     casper.then(function () {
         for (var i = 1; i <= 3; i++) {
-            functions.comments(casper, comment);    //Function to add comments  (source: basicfunctions.js)
+            functions.comments(casper, comment);   //source: basicfunctions.js
             this.wait(2000);
         }// for loop closed
     });
-
-    //Counting number of comments
+	
+	//Verifying the number of comments entered
     casper.then(function () {
         do
         {
